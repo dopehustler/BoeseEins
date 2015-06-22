@@ -1,0 +1,207 @@
+import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Arrays;
+import java.util.Scanner;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.border.Border;
+
+public class FrameBoeseEins extends JFrame implements ActionListener {
+
+	GameBoeseEins game = new GameBoeseEins();
+	Scanner sc = new Scanner(System.in);
+
+	int y1 = 5;
+	int y2 = 5;
+	int x = 90;
+	int roundnum = 0;
+	String player1;
+	String player2;
+
+	Border border = BorderFactory.createLineBorder(Color.BLACK, 1);
+	Color color1 = new Color(236, 236, 236);
+	JPanel panel = new JPanel();
+	JLabel p1label, p2label, p1score, p2score;
+	JButton button, resetbutton;
+
+	public FrameBoeseEins() {
+		System.out.println("Player 1:");
+		player1 = sc.next();
+		System.out.println("Player 2:");
+		player2 = sc.next();
+
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		getContentPane().setBackground(Color.LIGHT_GRAY);
+		setLayout(null);
+		setSize(250, 600);
+		setLocation(500, 70);
+		setTitle("Böse Eins");
+		setVisible(true);
+
+		p1label = new JLabel("   " + player1 + "   ");
+		p1label.setBounds(10, 30, 70, 30);
+		p1label.setBorder(border);
+		p1label.setBackground(color1);
+		p1label.setOpaque(true);
+		add(p1label);
+		p1label.setVisible(true);
+
+		p2label = new JLabel("   " + player2 + "   ");
+		p2label.setBounds(120, 30, 70, 30);
+		p2label.setBorder(border);
+		p2label.setBackground(color1);
+		p2label.setOpaque(true);
+		add(p2label);
+		p2label.setVisible(true);
+
+		panel = new JPanel();
+		panel.setBounds(0, 80, 240, 400);
+		panel.setBackground(Color.LIGHT_GRAY);
+		add(panel);
+		panel.setLayout(null);
+		panel.setVisible(true);
+
+		p1score = new JLabel("   " + game.player1total + "   ");
+		p1score.setBounds(10, 500, 30, 20);
+		p1score.setBorder(border);
+		p1score.setBackground(color1);
+		p1score.setOpaque(true);
+		add(p1score);
+		p1score.setVisible(true);
+
+		p2score = new JLabel("   " + game.player2total + "   ");
+		p2score.setBounds(200, 500, 30, 20);
+		p2score.setBorder(border);
+		p2score.setBackground(color1);
+		p2score.setOpaque(true);
+		add(p2score);
+		p2score.setVisible(true);
+
+		button = new JButton("Nächster Zug");
+		button.setBounds(50, 500, 140, 20);
+		button.setBorder(border);
+		add(button);
+		button.addActionListener(this);
+		button.setVisible(true);
+
+		resetbutton = new JButton("Neue Runde!");
+		resetbutton.setBounds(50, 530, 140, 20);
+		resetbutton.setBorder(border);
+		add(resetbutton);
+		resetbutton.addActionListener(this);
+		resetbutton.setVisible(true);
+		resetbutton.setEnabled(false);
+	}
+
+	public void actionPerformed(ActionEvent e) {
+
+		int[] values = game.Runde();
+		String wuerfe = Arrays.toString(values);
+		JLabel labels[] = new JLabel[100];
+		JLabel scores[] = new JLabel[100];
+
+		if (game.player1turn == true) {
+
+			labels[roundnum] = new JLabel(wuerfe);
+			labels[roundnum].setBounds(10, y1, 70, 20);
+			labels[roundnum].setBorder(border);
+			labels[roundnum].setOpaque(true);
+			labels[roundnum].setBackground(color1);
+			panel.add(labels[roundnum]);
+			labels[roundnum].setVisible(true);
+			labels[roundnum].revalidate();
+			labels[roundnum].repaint();
+
+			y1 += 25;
+			game.player1turn = false;
+
+		} else {
+
+			labels[roundnum] = new JLabel(wuerfe);
+			labels[roundnum].setBounds(120, y2, 70, 20);
+			labels[roundnum].setBorder(border);
+			labels[roundnum].setOpaque(true);
+			labels[roundnum].setBackground(color1);
+			panel.add(labels[roundnum]);
+			labels[roundnum].setVisible(true);
+			labels[roundnum].revalidate();
+			labels[roundnum].repaint();
+
+			y2 += 25;
+			game.player1turn = true;
+		}
+		if (game.player1turn == false) {
+			x = 90;
+		} else {
+			x = 200;
+		}
+		scores[roundnum] = new JLabel(String.valueOf(" " + game.ZwiStand));
+		scores[roundnum].setBounds(x, y1 - 25, 20, 20);
+		scores[roundnum].setBorder(border);
+		scores[roundnum].setOpaque(true);
+		if (game.ZwiStand == 0) {
+			scores[roundnum].setBackground(Color.red);
+		} else {
+			scores[roundnum].setBackground(Color.green);
+		}
+		panel.add(scores[roundnum]);
+		scores[roundnum].setVisible(true);
+		scores[roundnum].revalidate();
+		scores[roundnum].repaint();
+
+		roundnum++;
+
+		p1score.setText(String.valueOf("  " + game.player1total));
+		p2score.setText(String.valueOf("  " + game.player2total));
+
+		if (game.player1total >= 100) {
+			p1label.setBackground(Color.yellow);
+			p1score.setBackground(Color.yellow);
+			button.setText(player1 + " gewinnt!");
+			button.setEnabled(false);
+			resetbutton.setEnabled(true);
+		}
+		if (game.player2total >= 100) {
+			p2label.setBackground(Color.yellow);
+			p2score.setBackground(Color.yellow);
+			button.setText(player2 + " gewinnt!");
+			button.setEnabled(false);
+			resetbutton.setEnabled(true);
+		}
+		if (e.getSource() == resetbutton) {
+
+			p1label.setBackground(color1);
+			p2label.setBackground(color1);
+			p1score.setBackground(color1);
+			p2score.setBackground(color1);
+
+			panel.removeAll();
+			panel.revalidate();
+			panel.repaint();
+
+			button.setText("Nächster Zug!");
+			button.setEnabled(true);
+
+			roundnum = 0;
+			y1 = 0;
+			y2 = 0;
+			x = 90;
+			game.player1total = 0;
+			game.player2total = 0;
+			game.ZwiStand = 0;
+			game.player1turn = true;
+			resetbutton.setEnabled(false);
+			p1score.setText("  0");
+			p1score.revalidate();
+			p1score.repaint();
+			p2score.setText("  0");
+			p2score.revalidate();
+			p2score.repaint();
+
+		}
+	}
+}
