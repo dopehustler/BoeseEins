@@ -1,56 +1,22 @@
-import java.util.Arrays;
+
 import java.util.Random;
-import javax.swing.JFrame;
 
-public class GameBoeseEins extends JFrame {
+import javax.swing.JPanel;
 
-	int player1total = 0;
-	int player2total = 0;
-	int ZwiStand = 0;
-	public boolean player1turn = true;
+
+public class GameBoeseEins{
+
+	int wurf;
 	Random rand = new Random();
 
-	public int[] Runde() {
 
-		boolean einser = false;
-		int[] values = new int[5];
+	public int wuerfe(){
 
-		if (player1turn == true) {
-			for (int i = 0; i < 5; i++) {
-				int wurf = rand.nextInt(6) + 1;
-				if (wurf == 1) {
-					values[i] = wurf;
-					i = 4;
-					einser = true;
-					break;
-				} else {
-					values[i] = wurf;
-				}
-			}
-			if (einser == false) {
-				player1total = player1total + Arrays.stream(values).sum();
-			}
-		} else {
-			for (int i = 0; i < 5; i++) {
-				int wurf = rand.nextInt(6) + 1;
-				if (wurf == 1) {
-					values[i] = wurf;
-					i = 4;
-					einser = true;
-					break;
-				} else {
-					values[i] = wurf;
-				}
-			}
-			if (einser == false) {
-				player2total = player2total + Arrays.stream(values).sum();
-			}
-		}
-		if (einser == false) {
-			ZwiStand = Arrays.stream(values).sum();
-		} else {
-			ZwiStand = 0;
-		}
-		return values;
+		wurf = rand.nextInt(6) + 1;
+		
+		
+		return wurf;
+		
 	}
+
 }
