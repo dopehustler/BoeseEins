@@ -44,12 +44,12 @@ public class FrameBoeseEins extends JFrame implements ActionListener {
 	int y1 = 5;											// Variable für y-Koordinate der generierten JLabel (Player1)
 	int y2 = 5;											// Variable für y-Koordinate der generierten JLabel (Player2)
 	int x = 90;											// x-Koordinate für scores-Label
-	int roundnum = 0;									// Rundenzähler (1 Runde = Spieler würfelt <5 mal)
+	int roundnum = 0;									// Rundenzähler ("Würfel weitergeben" beendet Runde)
 	String player1;										// Name Player1
 	String player2;										// Name Player2
 
 	/*
-	 * Rahmen, Farben, JPanels, JLabels, JButtons
+	 * Rahmen, Farben, JPanels, JLabels, JButtons für den GUI-Aufbau
 	 */
 	
 	Border border = BorderFactory.createLineBorder(Color.BLACK, 1);
@@ -57,16 +57,26 @@ public class FrameBoeseEins extends JFrame implements ActionListener {
 	JPanel panel = new JPanel();
 	JLabel p1label, p2label, p1score, p2score, display1, display2, display3,
 			display4, display5;
-	JButton button, resetbutton, wuerfeln;
-
+	JButton weiter, reset, wuerfeln;
+	
+/*
+ * Konstruktor für den Frame
+ */
+	
 	public FrameBoeseEins() {
 
+		/*
+		 * Abfrage Spielernamen
+		 */
 		System.out.println("Player 1:");
 		player1 = sc.next();
 		System.out.println("Player 2:");
 		player2 = sc.next();
 
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		/*
+		 * Parameter für JFrame
+		 */
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);				// !!-Beendet den Prozess (wichtig)-!!
 		getContentPane().setBackground(Color.LIGHT_GRAY);
 		setLayout(null);
 		setSize(255, 435);
@@ -74,15 +84,21 @@ public class FrameBoeseEins extends JFrame implements ActionListener {
 		setTitle("Böse Eins");
 		setVisible(true);
 
+		/*
+		 * Parameter für JLabel Spielername (Player1)
+		 */
 		p1label = new JLabel(player1);
 		p1label.setBounds(10, 30, 70, 30);
 		p1label.setBorder(border);
-		p1label.setBackground(Color.yellow);
-		p1label.setOpaque(true);
-		p1label.setHorizontalAlignment(SwingConstants.CENTER);
+		p1label.setBackground(Color.green);
+		p1label.setOpaque(true);									// Für JLabels mit Background. Wenn 'false', JLabel transparent
+		p1label.setHorizontalAlignment(SwingConstants.CENTER);		// Text in JLabel wird zentriert
 		add(p1label);
 		p1label.setVisible(true);
 
+		/*
+		 * Parameter für JLabel Spielername (Player2)
+		 */
 		p2label = new JLabel("   " + player2 + "   ");
 		p2label.setBounds(120, 30, 70, 30);
 		p2label.setBorder(border);
@@ -92,15 +108,21 @@ public class FrameBoeseEins extends JFrame implements ActionListener {
 		add(p2label);
 		p2label.setVisible(true);
 
+		/*
+		 * Parameter für JLabel, welches Wurf 1 anzeigt (display1)
+		 */
 		display1 = new JLabel();
 		display1.setBounds(10, 70, 20, 20);
 		display1.setBorder(border);
 		display1.setBackground(color1);
-		display1.setOpaque(true);
+		display1.setOpaque(true);	
 		display1.setHorizontalAlignment(SwingConstants.CENTER);
 		add(display1);
 		display1.setVisible(true);
 
+		/*
+		 * Parameter für JLabel, welches Wurf 2 anzeigt (display2)
+		 */
 		display2 = new JLabel();
 		display2.setBounds(50, 70, 20, 20);
 		display2.setBorder(border);
@@ -110,6 +132,9 @@ public class FrameBoeseEins extends JFrame implements ActionListener {
 		add(display2);
 		display2.setVisible(true);
 
+		/*
+		 * Parameter für JLabel, welches Wurf 3 anzeigt (display3)
+		 */
 		display3 = new JLabel();
 		display3.setBounds(90, 70, 20, 20);
 		display3.setBorder(border);
@@ -119,6 +144,9 @@ public class FrameBoeseEins extends JFrame implements ActionListener {
 		add(display3);
 		display3.setVisible(true);
 
+		/*
+		 * Parameter für JLabel, welches Wurf 4 anzeigt (display4)
+		 */
 		display4 = new JLabel();
 		display4.setBounds(130, 70, 20, 20);
 		display4.setBorder(border);
@@ -128,6 +156,9 @@ public class FrameBoeseEins extends JFrame implements ActionListener {
 		add(display4);
 		display4.setVisible(true);
 
+		/*
+		 * Parameter für JLabel, welches Wurf 5 anzeigt (display5)
+		 */
 		display5 = new JLabel();
 		display5.setBounds(170, 70, 20, 20);
 		display5.setBorder(border);
@@ -136,7 +167,10 @@ public class FrameBoeseEins extends JFrame implements ActionListener {
 		display5.setHorizontalAlignment(SwingConstants.CENTER);
 		add(display5);
 		display5.setVisible(true);
-
+		
+		/*
+		 * Parameter für JPanel, "Leinwand" für generierte Arrays
+		 */
 		panel = new JPanel();
 		panel.setBounds(0, 100, 240, 200);
 		panel.setBackground(Color.LIGHT_GRAY);
@@ -144,6 +178,9 @@ public class FrameBoeseEins extends JFrame implements ActionListener {
 		panel.setLayout(null);
 		panel.setVisible(true);
 
+		/*
+		 * Parameter für JLabel, Spielstandanzeige Player1 (p1score)
+		 */
 		p1score = new JLabel("0");
 		p1score.setBounds(10, 340, 30, 20);
 		p1score.setBorder(border);
@@ -153,6 +190,9 @@ public class FrameBoeseEins extends JFrame implements ActionListener {
 		add(p1score);
 		p1score.setVisible(true);
 
+		/*
+		 * Parameter für JLabel, Spielstandanzeige Player2 (p2score)
+		 */
 		p2score = new JLabel("0");
 		p2score.setBounds(200, 340, 30, 20);
 		p2score.setBorder(border);
@@ -162,69 +202,104 @@ public class FrameBoeseEins extends JFrame implements ActionListener {
 		add(p2score);
 		p2score.setVisible(true);
 
+		/*
+		 * Parameter für JButton "Würfeln" (wuerfeln)
+		 */
 		wuerfeln = new JButton("Würfeln!");
 		wuerfeln.setBounds(50, 310, 140, 20);
 		wuerfeln.setBorder(border);
 		add(wuerfeln);
 		wuerfeln.addActionListener(this);
 		wuerfeln.setVisible(true);
-		wuerfeln.revalidate();
-		wuerfeln.repaint();
+		wuerfeln.revalidate();								// ohne Aufrufe von repaint() und revalidate() werden dynamische Swing-Elemente
+		wuerfeln.repaint();									// teilweise schlecht oder nicht angezeigt
 
-		button = new JButton("Nächster Zug");
-		button.setBounds(50, 340, 140, 20);
-		button.setBorder(border);
-		add(button);
-		button.addActionListener(this);
-		button.setVisible(true);
-		button.revalidate();
-		button.repaint();
-
-		resetbutton = new JButton("Neue Runde!");
-		resetbutton.setBounds(50, 370, 140, 20);
-		resetbutton.setBorder(border);
-		add(resetbutton);
-		resetbutton.addActionListener(this);
-		resetbutton.setVisible(true);
-		resetbutton.setEnabled(false);
-		resetbutton.revalidate();
-		resetbutton.repaint();
+		/*
+		 * Parameter für JButton "Würfel weitergeben" (weiter)
+		 */
+		weiter = new JButton("Würfel weitergeben!");
+		weiter.setBounds(50, 340, 140, 20);
+		weiter.setBorder(border);
+		add(weiter);
+		weiter.addActionListener(this);
+		weiter.setVisible(true);
+		weiter.revalidate();
+		weiter.repaint();
+		
+		/*
+		 * Parameter für JButton "Neue Runde" (reset)
+		 */
+		reset = new JButton("Neue Runde!");
+		reset.setBounds(50, 370, 140, 20);
+		reset.setBorder(border);
+		add(reset);
+		reset.addActionListener(this);
+		reset.setVisible(true);
+		reset.setEnabled(false);
+		reset.revalidate();
+		reset.repaint();
 	}
 
+	/*
+	 * ActionPerformed-Methode des ActionListeners
+	 */
 	public void actionPerformed(ActionEvent e) {
 
-		if (e.getSource() == button) {
+		/*
+		 * Bei drücken von "Würfel weitergeben"
+		 */
+		if (e.getSource() == weiter) {
 
+			/*
+			 * Panel-Putzer: Wenn 8 Array-Zeilen auf dem Panel sind, wird der alte Inhalt gelöscht
+			 */
 			if (roundnum == 16) {
 				panel.removeAll();
 				panel.revalidate();
 				panel.repaint();
-				y1 = 5;
-				y2 = 5;
-				roundnum = 0;
+				y1 = 5;					// y1 und y1 dienen zur Platzierung der Array-Labels auf dem JPanel. y1 ist dabei die y-Position
+				y2 = 5;					// für Spieler 1, y2 jene für Spieler 2.
+				roundnum = 0;			
 			}
 
+			/*
+			 * Die in den Displays gewürfelten Zahlen werden zu einem Array kombiniert
+			 */
 			combined[0] = display1.getText();
 			combined[1] = display2.getText();
 			combined[2] = display3.getText();
 			combined[3] = display4.getText();
 			combined[4] = display5.getText();
 
+			/*
+			 * Die Displays werden wieder geleert
+			 */
 			display1.setText("");
 			display2.setText("");
 			display3.setText("");
 			display4.setText("");
 			display5.setText("");
 
+			/*
+			 * Der Button "Würfeln" wird aktiviert, Wurfzähler auf 0 gesetzt, damit der nächste Spieler würfeln kann
+			 */
 			wuerfeln.setEnabled(true);
 			anzWuerfe = 0;
 
-			String wuerfe = Arrays.toString(combined);
-			JLabel labels[] = new JLabel[100];
-			JLabel scores[] = new JLabel[100];
+			String wuerfe = Arrays.toString(combined);			//Der kombinierte Array wird in einen einzelnen String verwandelt 
+			JLabel labels[] = new JLabel[16];					//JLabel-Array für max. 16 verschiedene labels pro Panel
+			JLabel scores[] = new JLabel[16];					//JLabel-Array für max. 16 verschiedene scores pro Panel
+			
+			/*
+			 * Wenn ein einser fiell, wird der Zwischenstand (gewonnene Punkte d. Runde) auf 0 gesetzt
+			 */
 			if (einser == true) {
 				ZwiStand = 0;
 			}
+			
+			/*
+			 * Wenn Spieler 1 an der Reihe ist und keine 1 gewürfelt hat, wird der Zwischenstand seienm Konto gutgeschrieben
+			 */
 			if (player1turn == true) {
 
 				if (einser == false) {
@@ -232,18 +307,27 @@ public class FrameBoeseEins extends JFrame implements ActionListener {
 				}
 			} else {
 
+				/*
+				 * Das Obige für Spieler 2 (player1turn(false))
+				 */
 				if (einser == false) {
 					player2total = player2total + ZwiStand;
 				}
 			}
 
+			/*
+			 * Wenn Spieler 1 an der Reihe ist, wird ein JLabel generiert
+			 * Erkl. Koordinaten Player1-Labels: 	x=10, y1=5  (Runde 1) 
+			 * 										x=10, y1=30 (Runde 3)
+			 * 										x=10, y1=55 (Runde 5)
+			 */
 			if (player1turn == true) {
 
 				p1label.setBackground(color1);
-				p2label.setBackground(Color.yellow);
+				p2label.setBackground(Color.green);
 
 				labels[roundnum] = new JLabel(wuerfe);
-				labels[roundnum].setBounds(10, y1, 70, 20);
+				labels[roundnum].setBounds(10, y1, 70, 20);		//ausschlaggebende Zeile für autom. generierte JLabels
 				labels[roundnum].setBorder(border);
 				labels[roundnum].setOpaque(true);
 				labels[roundnum].setBackground(color1);
@@ -253,12 +337,18 @@ public class FrameBoeseEins extends JFrame implements ActionListener {
 				labels[roundnum].revalidate();
 				labels[roundnum].repaint();
 
-				y1 += 25;
-				player1turn = false;
+				y1 += 25;							//y1 wird erhöht
+				player1turn = false;				//Nächster Spieler an der Reihe
 
 			} else {
 
-				p1label.setBackground(Color.yellow);
+				/*
+				 * Wenn Spieler 2 an der Reihe ist, wird ein JLabel generiert
+				 * Erkl. Koordinaten Player2-Labels: 	x=120, y1=5  (Runde 2) 
+				 * 										x=120, y1=30 (Runde 4)
+				 * 										x=120, y1=55 (Runde 6)
+				 */
+				p1label.setBackground(Color.green);
 				p2label.setBackground(color1);
 
 				labels[roundnum] = new JLabel(wuerfe);
@@ -272,57 +362,93 @@ public class FrameBoeseEins extends JFrame implements ActionListener {
 				labels[roundnum].revalidate();
 				labels[roundnum].repaint();
 
-				y2 += 25;
+				y2 += 25;							//y2 wird erhöht
 				player1turn = true;
 			}
-			if (player1turn == false) {
+			
+			/*
+			 * Platzierung der Score-Labels auf x-Achse
+			 */
+			if (player1turn == false) {				
 				x = 90;
 			} else {
 				x = 200;
 			}
+			
+			/*
+			 * Score-Labels werden generiert
+			 */
 			scores[roundnum] = new JLabel(String.valueOf(ZwiStand));
-			scores[roundnum].setBounds(x, y1 - 25, 20, 20);
+			scores[roundnum].setBounds(x, y1 - 25, 20, 20);					//y-25, da y1 dieser Runde bereits um 25 erhöht wurde
 			scores[roundnum].setBorder(border);
 			scores[roundnum].setOpaque(true);
 			scores[roundnum].setHorizontalAlignment(SwingConstants.CENTER);
 			if (ZwiStand == 0) {
-				scores[roundnum].setBackground(Color.red);
+				scores[roundnum].setBackground(Color.red);					//wenn Zwischenstand 0, ist das score-label rot
 			} else {
-				scores[roundnum].setBackground(Color.green);
+				scores[roundnum].setBackground(Color.green);				//Wenn Zwischenstand > 0, ist das score-label grün
 			}
 			panel.add(scores[roundnum]);
 			scores[roundnum].setVisible(true);
 			scores[roundnum].revalidate();
 			scores[roundnum].repaint();
 
+			/*
+			 * Das jeweilige Total wird in einen String umgewandelt und im jeweiligen Label (p1score oder p2score) angezeigt
+			 */
 			p1score.setText(String.valueOf(player1total));
 			p2score.setText(String.valueOf(player2total));
 
+			/*
+			 * Player 1 gewinnt, wenn er >100 Punkte erreicht
+			 * Farben werden entsprechend gesetzt und die richtigen Buttons aktiviert/deaktiviert
+			 */
 			if (player1total >= 100) {
 				p1label.setBackground(Color.yellow);
 				p1score.setBackground(Color.yellow);
-				button.setText(player1 + " gewinnt!");
+				p2label.setBackground(color1);
+				weiter.setText(player1 + " gewinnt!");
 				wuerfeln.setEnabled(false);
-				button.setEnabled(false);
-				resetbutton.setEnabled(true);
+				weiter.setEnabled(false);
+				reset.setEnabled(true);
 			}
+			
+			/*
+			 * Player 2 gewinnt, wenn er >100 Punkte erreicht
+			 * Farben werden entsprechend gesetzt und die richtigen Buttons aktiviert/deaktiviert
+			 */
 			if (player2total >= 100) {
 				p2label.setBackground(Color.yellow);
 				p2score.setBackground(Color.yellow);
-				button.setText(player2 + " gewinnt!");
+				p1label.setBackground(color1);
+				weiter.setText(player2 + " gewinnt!");
 				wuerfeln.setEnabled(false);
-				button.setEnabled(false);
-				resetbutton.setEnabled(true);
+				weiter.setEnabled(false);
+				reset.setEnabled(true);
 			}
 
+			/* Runde beendet
+			 * Zwischenstand wird zurückgesetzt
+			 * Rundenzähler wird um 1 erhöht
+			 * einser wird wieder auf false gesetzt
+			 */
 			ZwiStand = 0;
 			roundnum++;
 			einser = false;
 		}
 
-		if (e.getSource() == resetbutton) {
+		/*
+		 * Bei drücken von "Neue Runde" (erst aktiv, sobald der Gewinner feststeht.
+		 */
+		if (e.getSource() == reset) {
 
-			p1label.setBackground(Color.yellow);
+			/*
+			 * Veränderte Variablen werden wieder auf ihren Ausgangswert zurückgesetzt.
+			 * Button "Neue Runde" wird deaktiviert, "Würfeln" und "Würfel weitergeben" aktiviert.
+			 * Namen bleiben erhalten
+			 */
+			
+			p1label.setBackground(Color.green);
 			p2label.setBackground(color1);
 			p1score.setBackground(color1);
 			p2score.setBackground(color1);
@@ -331,8 +457,8 @@ public class FrameBoeseEins extends JFrame implements ActionListener {
 			panel.revalidate();
 			panel.repaint();
 
-			button.setText("Nächster Zug!");
-			button.setEnabled(true);
+			weiter.setText("Nächster Zug!");
+			weiter.setEnabled(true);
 			wuerfeln.setEnabled(true);
 			roundnum = 0;
 			y1 = 0;
@@ -342,7 +468,7 @@ public class FrameBoeseEins extends JFrame implements ActionListener {
 			player2total = 0;
 			ZwiStand = 0;
 			player1turn = true;
-			resetbutton.setEnabled(false);
+			reset.setEnabled(false);
 			p1score.setText("0");
 			p1score.revalidate();
 			p1score.repaint();
@@ -351,37 +477,41 @@ public class FrameBoeseEins extends JFrame implements ActionListener {
 			p2score.repaint();
 
 		}
+		
+		/*
+		 * Bei drücken von "Würfeln"
+		 */
 		if (e.getSource() == wuerfeln) {
-			int wurf = game.wuerfe();
-			anzWuerfe++;
+			int wurf = game.wuerfe();						//Zufallszahl wird geholt
+			anzWuerfe++;									//Wurfzähler wird erhöht
 
 			switch (anzWuerfe) {
 			case 1:
-				display1.setText(String.valueOf(wurf));
+				display1.setText(String.valueOf(wurf));		// Anzeige Display1
 				break;
 			case 2:
-				display2.setText(String.valueOf(wurf));
+				display2.setText(String.valueOf(wurf));		// Anzeige Display2
 				break;
 			case 3:
-				display3.setText(String.valueOf(wurf));
+				display3.setText(String.valueOf(wurf));		// Anzeige Display3
 				break;
 			case 4:
-				display4.setText(String.valueOf(wurf));
+				display4.setText(String.valueOf(wurf));		// Anzeige Display4
 				break;
 			case 5:
-				display5.setText(String.valueOf(wurf));
+				display5.setText(String.valueOf(wurf));		// Anzeige Display5
 				break;
 			}
 			if (anzWuerfe >= 5) {
-				wuerfeln.setEnabled(false);
+				wuerfeln.setEnabled(false);					//Button "Würfeln" wird deaktiviert, sobald 5 mal gewürfelt wurde
 			}
 
 			if (wurf == 1) {
 				einser = true;
-				wuerfeln.setEnabled(false);
+				wuerfeln.setEnabled(false);					//Button "Würfeln" wird deaktiviert, sobald ein einser fällt
 			}
 
-			ZwiStand += wurf;
+			ZwiStand += wurf;								//der jeweilige Wurf wird mit dem Zwischenstand verrechnet
 		}
 	}
 }
